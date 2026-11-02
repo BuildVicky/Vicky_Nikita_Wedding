@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Wedding admin</title><script src="config.js"></script>
+<script src="vendor/supabase.js"></script>
+<style>
+body{margin:0;font:16px/1.5 system-ui,sans-serif;background:#FBF6EC;color:#3A2F2A}main{max-width:1100px;margin:0 auto;padding:20px}
+h1{font-family:Georgia,serif;font-weight:400}input,select,textarea,button{font:inherit;min-height:44px;padding:6px 10px;border:1px solid #CDB88A;border-radius:8px;background:#fff}
+button{background:#8A6420;color:#fff;border:0;cursor:pointer;padding:6px 16px}button.alt{background:#fff;color:#6B4C14;border:1px solid #8A6420}button.del{background:#8A1F1F}
+.card{background:#fff;border:1px solid #E6D5B0;border-radius:12px;padding:14px;margin:12px 0}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.tot{font-size:22px}.sub{color:#6B4C14;font-size:14px}.hid{opacity:.55}.err{color:#8A1F1F}[hidden]{display:none!important}
+</style></head><body><main>
+<h1>Wedding admin</h1>
+<section id="login" class="card"><p>Sign in with the owner account you created in Supabase.</p>
+<div class="row"><input id="em" type="email" placeholder="Email" autocomplete="username"><input id="pw" type="password" placeholder="Password" autocomplete="current-password"><button id="go">Sign in</button></div><p id="lerr" class="err" role="alert"></p></section>
+<section id="app" hidden>
+<div class="row"><button id="tR">RSVPs</button><button id="tB" class="alt">Blessings</button><button id="csv" class="alt">Export RSVPs (CSV)</button><button id="out" class="alt">Sign out</button></div>
+<p id="msg" class="sub" role="status"></p>
+<div id="vR"><div class="card tot" id="tot"></div><div id="rl"></div></div>
+<div id="vB" hidden><div id="bl"></div></div>
+</section></main>
+<script>
+(function(){
+var C=window.WEDDING_CFG||{},U=C.SUPABASE_URL||'',K=C.SUPABASE_PUBLISHABLE_KEY||'',rs=[],bs=[];
+var sb=(U&&K&&window.supabase)?supabase.createClient(U,K,{auth:{persistSession:true,autoRefreshToken:true,storage:window.sessionStorage}}):null;
+function $(i){return document.getElementById(i)}
+function el(t,p,k){var e=document.createElement(t);for(var a in p||{})e[a]=p[a];(k||[]).forEach(function(c){e.appendChild(typeof c==='string'?document.createTextNode(c):c)});return e}
+function ok(r){if(r.error){if(r.status===401||r.status===403)signout();throw new Error(r.error.message);}return r.data;}
+function say(m,bad){$('msg').textContent=m;$('msg').className=bad?'err':'sub';}
+function signout(){if(sb)sb.auth.signOut();$('app').hidden=true;$('login').hidden=false;}
+$('go').onclick=function(){$('lerr').textContent='';
+ sb.auth.signInWithPassword({email:$('em').value.trim(),password:$('pw').value}).then(function(r){if(r.error)throw r.error;start();}).catch(function(e){$('lerr').textContent=e.message;});};
+$('out').onclick=signout;
+$('tR').onclick=function(){$('vR').hidden=false;$('vB').hidden=true;$('tR').className='';$('tB').className='alt';};
+$('tB').onclick=function(){$('vR').hidden=true;$('vB').hidden=false;$('tB').className='';$('tR').className='alt';};
+function fmt(d){return new Date(d).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'})}
+function fail(e){say(e.message,1)}
+function start(){$('login').hidden=true;$('app').hidden=false;load();}
+function load(){say('Loading…');
+ Promise.all([sb.from('rsvps').select('*').order('created_at',{ascending:false}),sb.from('blessings').select('*').order('created_at',{ascending:false})])
+ .then(function(r){rs=ok(r[0]);bs=ok(r[1]);draw();say(rs.length||bs.length?'':'Connected. No replies yet, or this login is not the owner account (it must be vicky.bhoyar11@gmail.com).');}).catch(fail);}
+function draw(){
+ var acc=rs.filter(function(x){return x.status==='accepted'}),dec=rs.length-acc.length,tot=acc.reduce(function(a,x){return a+x.guests},0);
+ $('tot').textContent='Confirmed attendees: '+tot+'   (accepted replies: '+acc.length+', declined: '+dec+')';
+ var rl=$('rl');rl.textContent='';
+ rs.forEach(function(r){var st=el('select',{},[el('option',{value:'accepted',textContent:'Accepted'}),el('option',{value:'declined',textContent:'Declined'})]);st.value=r.status;
+  var g=el('input',{type:'number',min:0,max:20,value:r.guests,style:'width:90px'});var nm=el('input',{value:r.name,maxLength:80});var ms=el('textarea',{value:r.message||'',rows:2,style:'width:100%'});
+  st.onchange=function(){if(st.value==='declined')g.value=0;else if(!+g.value)g.value=1;};
+  var save=el('button',{textContent:'Save'}),del=el('button',{textContent:'Delete',className:'del'});
+  save.onclick=function(){sb.from('rsvps').update({name:nm.value.trim(),status:st.value,guests:+g.value,message:ms.value.trim()||null,updated_at:new Date().toISOString()}).eq('id',r.id).then(ok).then(load).catch(fail);};
+  del.onclick=function(){if(confirm('Delete the RSVP of '+r.name+'?'))sb.from('rsvps').delete().eq('id',r.id).then(ok).then(load).catch(fail);};
+  rl.appendChild(el('div',{className:'card'},[el('div',{className:'row'},[nm,st,g,save,del]),ms,el('div',{className:'sub',textContent:'Sent '+fmt(r.created_at)+' · updated '+fmt(r.updated_at)})]));});
+ if(!rs.length)rl.appendChild(el('p',{textContent:'No RSVPs yet.'}));
+ var bl=$('bl');bl.textContent='';
+ bs.forEach(function(b){var hide=el('button',{textContent:b.approved?'Unapprove':'Approve',className:'alt'}),del=el('button',{textContent:'Delete',className:'del'});
+  hide.onclick=function(){sb.from('blessings').update({approved:!b.approved}).eq('id',b.id).then(ok).then(load).catch(fail);};
+  del.onclick=function(){if(confirm('Delete this blessing?'))sb.from('blessings').delete().eq('id',b.id).then(ok).then(load).catch(fail);};
+  bl.appendChild(el('div',{className:'card'+(b.approved?'':' hid')},[el('strong',{textContent:b.name}),el('span',{className:'sub',textContent:'  ·  '+b.relationship+'  ·  '+fmt(b.created_at)+(b.approved?'  ·  APPROVED':'  ·  PENDING')}),el('p',{textContent:b.message,style:'white-space:pre-wrap'}),el('div',{className:'row'},[hide,del])]));});
+ if(!bs.length)bl.appendChild(el('p',{textContent:'No blessings yet.'}));$('tB').textContent='Blessings ('+bs.filter(function(b){return !b.approved}).length+' pending)';}
+$('csv').onclick=function(){function c(v){v=String(v==null?'':v);if(/^[=+\-@\t\r]/.test(v))v="'"+v;return '"'+v.replace(/"/g,'""')+'"';}
+ var rows=[['Name','Status','Guests','Message','Sent','Updated']].concat(rs.map(function(r){return [r.name,r.status,r.guests,r.message,r.created_at,r.updated_at]}));
+ var a=el('a',{href:URL.createObjectURL(new Blob(['\ufeff'+rows.map(function(r){return r.map(c).join(',')}).join('\r\n')],{type:'text/csv'})),download:'rsvps.csv'});document.body.appendChild(a);a.click();a.remove();};
+if(!sb)$('lerr').textContent='Could not start: check config.js and your internet connection.';
+else sb.auth.getSession().then(function(r){if(r.data&&r.data.session)start();});
+})();
+</script></body></html>

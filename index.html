@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vicky &amp; Nikita – Wedding Invitation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Jost:wght@400;500&family=Great+Vibes&display=swap" rel="stylesheet">
+<script src="config.js"></script>
+<script src="vendor/supabase.js"></script>
+<style>
+body{margin:0;background:#FBF6EC}
+a{color:#8A6420;text-decoration:none}a:hover{color:#5C4112}
+*{box-sizing:border-box}img{max-width:100%}
+.sec{padding:88px 24px}
+.tile{width:150px;padding:24px 0;border:1px solid #E8C97A;border-radius:16px}
+.num{font-family:'Cormorant Garamond',serif;font-size:56px;line-height:1}
+.lbl{font-size:14px;letter-spacing:3px;text-transform:uppercase;color:#E8C97A}
+.alb{flex:1 1 240px;max-width:100%;height:340px;object-fit:cover;border:6px solid #fff;box-shadow:0 0 0 1px #E6D5B0}
+.flick{animation:flick 4.5s ease-in-out infinite}
+@keyframes flick{0%,100%{opacity:.88;transform:scale(.97)}35%{opacity:1;transform:scale(1.04)}60%{opacity:.92;transform:scale(.99)}}
+@media (prefers-reduced-motion:reduce){.flick{animation:none}}
+@media (max-width:600px){
+.sec{padding:56px 20px}
+.tile{width:calc(50% - 8px);padding:18px 0}
+.num{font-size:44px}
+.alb{flex:1 1 calc(50% - 8px);height:240px}
+.cnt{gap:16px!important}
+}
+
+html,body{overflow-x:clip}
+.tab{min-height:48px;padding:0 28px;border-radius:48px;border:1px solid #8A6420;font:500 15px Jost,sans-serif;letter-spacing:2px;text-transform:uppercase;cursor:pointer;background:transparent;color:#6B4C14}
+.tab.on{background:#8A6420;color:#fff}
+#glow{transition:opacity .7s ease;will-change:transform}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+:focus-visible{outline:3px solid #8A6420;outline-offset:2px}
+.opt{display:flex;align-items:center;gap:10px;min-height:48px;padding:0 16px;border:1px solid #CDB88A;border-radius:12px;background:#fff;cursor:pointer;flex:1 1 220px;text-align:left}
+.opt:has(input:checked){background:#8A6420;border-color:#8A6420;color:#fff}
+.opt input{accent-color:#8A6420;width:20px;height:20px;margin:0}
+.ring{width:210px;height:210px;margin:0 auto 36px;border-radius:50%;border:1px solid #D9B96E;box-shadow:0 0 0 7px #FBF6EC,0 0 0 8px #E8C97A;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,255,255,.65)}
+.big{font-family:'Cormorant Garamond',serif;font-size:84px;line-height:1;color:#8A6420}
+.cap{font-size:14px;letter-spacing:2px;text-transform:uppercase;color:#6B4C14;max-width:150px;line-height:1.35;margin-top:6px}
+.names{display:flex;flex-wrap:wrap;justify-content:center;gap:12px 14px}
+.gname{display:inline-flex;align-items:center;gap:10px;padding:6px 22px 6px 16px;border-radius:44px;background:rgba(255,255,255,.75);border:1px solid #EBD3C2;max-width:100%}
+.gname.fresh{animation:gin .9s ease both}
+.gf{width:22px;height:22px;flex:none;color:#E9B3A8}
+.gn{font-family:'Great Vibes',cursive;font-size:clamp(30px,7vw,42px);line-height:1.25;color:#5A3A2C;overflow-wrap:anywhere}
+.gx{font-size:14px;color:#8A6420;letter-spacing:1px}
+@keyframes gin{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.gname.fresh{animation:none}}
+@media (max-width:600px){.ring{width:180px;height:180px}.big{font-size:70px}}
+
+.script{font-family:'Great Vibes',cursive;font-weight:400;line-height:1.15}
+.orn{display:block;width:44px;height:44px;margin:0 auto 6px}
+.scr-row{display:grid;grid-template-columns:1fr 1.45fr 1.1fr;gap:12px;max-width:640px;margin:36px auto 0}
+.scr-lbl{font-size:14px;letter-spacing:4px;text-transform:uppercase;color:#8A6420;margin-bottom:8px}
+.scr-box{position:relative;height:clamp(110px,26vw,150px);border-radius:16px;overflow:hidden;background:#fff;border:1px solid #E6D5B0;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(120,90,40,.10)}
+.scr-box canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair;transition:opacity .9s ease}
+.scr-box.rv canvas{opacity:0;pointer-events:none}
+.scr-val{font-family:'Cormorant Garamond',serif;font-size:clamp(34px,9vw,60px);line-height:1;color:#3A2F2A}
+.scr-val.m{font-size:clamp(20px,5.8vw,38px)}
+#finalReveal{position:relative;margin-top:48px;padding:36px 12px;opacity:0;transition:opacity 1.2s ease}
+#finalReveal.show{opacity:1}
+#finalReveal::before{content:'';position:absolute;inset:-20px;background:radial-gradient(closest-side,rgba(232,201,122,.38),rgba(232,201,122,0));pointer-events:none}
+#finalReveal>*{position:relative}
+#hearts{position:absolute;left:0;right:0;bottom:0;height:0;pointer-events:none}
+.heart{position:absolute;bottom:0;font-size:18px;opacity:0;animation:floatUp 5.5s ease-in forwards}
+@keyframes floatUp{0%{opacity:0;transform:translateY(0)}15%{opacity:.85}100%{opacity:0;transform:translateY(-260px)}}
+.bl-wrap{columns:2 300px;column-gap:22px;margin-top:36px}
+.bl{break-inside:avoid;margin:0 0 22px;position:relative;padding:34px 26px 24px;text-align:left;background:linear-gradient(165deg,#FFFDF8 0%,#F8EEDF 100%);border:1px solid #E7D6B2;border-radius:6px;box-shadow:0 6px 18px rgba(120,90,40,.10);transition:transform .35s ease,box-shadow .35s ease;animation:blIn .8s ease both}
+.bl:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(120,90,40,.16)}
+.bl::before{content:'';position:absolute;inset:6px;border:1px solid rgba(184,137,58,.28);border-radius:3px;pointer-events:none}
+.bl .bf{position:absolute;top:12px;right:14px;width:34px;height:34px;color:#EBC1B8;opacity:.8}
+.bm{margin:0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(19px,4.6vw,22px);line-height:1.55;color:#3A2F2A;white-space:pre-wrap;overflow-wrap:anywhere}
+.bm::before{content:'\201C';color:#B8893A;font-size:1.6em;line-height:0;vertical-align:-.28em;margin-right:4px}
+.bm::after{content:'\201D';color:#B8893A;font-size:1.6em;line-height:0;vertical-align:-.28em;margin-left:4px}
+.bn{margin-top:16px;font-family:'Great Vibes',cursive;font-size:32px;line-height:1.1;color:#6B4C14;overflow-wrap:anywhere}
+.br{font-size:14px;letter-spacing:3px;text-transform:uppercase;color:#8A6420}
+@keyframes blIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.bl{animation:none}.heart{display:none}#finalReveal{transition:none}.scr-box canvas{transition:none}}
+</style>
+</head>
+<body>
+<div id="invRoot" style="position:relative;font-family:'Jost',sans-serif;color:#3A2F2A;font-size:16px;line-height:1.6;background:#FBF6EC;overflow:hidden">
+
+<!-- PAPER-PLANE FLIGHT PATH (decor) -->
+<svg id="flight" aria-hidden="true" width="1280" height="3300" style="position:absolute;top:0;left:0;pointer-events:none;z-index:40;overflow:visible">
+<path id="pathD" d="" fill="none" stroke="#B8893A" stroke-width="3.4" stroke-linecap="round" stroke-dasharray="0 15" opacity=".4"/>
+<path id="trailD" d="" fill="none" stroke="#B8893A" stroke-width="2.4" stroke-dasharray="12 9" opacity=".75"/>
+<g id="plane" opacity="0.6">
+<path d="M-50,3 C-56,-2 -54,-7 -50,-4 C-46,-7 -44,-2 -50,3Z" fill="#D98B3A"/>
+<polygon points="34,0 -30,-18 -12,0" fill="#FBF6EC" stroke="#B8893A" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="34,0 -12,0 -30,18" fill="#B8893A" stroke="#8A6420" stroke-width="1.2" stroke-linejoin="round"/>
+<polygon points="-12,0 -30,-18 -22,0" fill="#E8C97A" opacity=".8"/>
+</g></svg>
+<!-- CANDLE GLOW (follows cursor / finger) -->
+<div id="glow" style="position:absolute;top:0;left:0;width:320px;height:320px;pointer-events:none;z-index:50;transition:opacity .7s ease;opacity:0"><div class="flick" style="width:100%;height:100%;border-radius:50%;background:radial-gradient(circle,rgba(255,200,120,0.34) 0%,rgba(255,165,70,0.15) 38%,rgba(255,165,70,0) 70%)"></div></div>
+
+<!-- HERO -->
+<section id="hero" style="background:#2E2745;color:#FBF6EC;text-align:center;padding:56px 16px 72px;position:relative;overflow:hidden;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-shadow:0 1px 14px rgba(20,14,34,.55)">
+<div aria-hidden="true" id="heroBg" style="position:absolute;left:0;right:0;top:-80px;bottom:0;pointer-events:none;background:linear-gradient(180deg,rgba(30,22,48,.55) 0%,rgba(30,22,48,.22) 42%,rgba(30,22,48,.62) 100%),url(images/venue.jpg) 48% 58%/cover no-repeat;will-change:transform"></div>
+<div style="position:relative;z-index:1;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:22px;color:#E8C97A">Shree Ganeshaya Namah</div>
+<div id="arch" style="position:relative;z-index:1;width:100%;max-width:640px"><div style="margin:36px auto 0;max-width:640px;border:1px solid #E8C97A;border-radius:320px 320px 0 0;padding:64px 20px 48px;background:rgba(24,18,38,0.36);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)">
+<div style="width:64px;height:64px;margin:0 auto 20px;border-radius:50%;border:1px solid #E8C97A;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:22px;color:#E8C97A">V&amp;N</div>
+<h1 style="margin:0;font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(46px,13vw,104px);line-height:1.05;letter-spacing:1px">Vicky &amp; Nikita</h1>
+<div style="margin-top:16px;font-size:14px;letter-spacing:4px;text-transform:uppercase;color:#E8C97A">Wedding Invitation</div>
+<div style="margin-top:28px;font-family:'Cormorant Garamond',serif;font-size:32px">29 November 2026</div>
+<a href="#countdown" style="display:inline-block;margin-top:28px;min-height:44px;line-height:44px;padding:0 32px;border:1px solid #E8C97A;border-radius:44px;color:#E8C97A;font-size:14px;letter-spacing:3px;text-transform:uppercase">Save the Date</a>
+</div></div>
+<div style="height:0"></div>
+</section>
+
+
+<!-- SCRATCH TO REVEAL -->
+<section id="surprise" class="sec" style="background:linear-gradient(180deg,#FBF6EC 0%,#F6E7DC 100%);text-align:center">
+<div style="max-width:680px;margin:0 auto">
+<svg class="orn" aria-hidden="true"><use href="#flower" style="color:#E9B8B0"/></svg>
+<h2 class="script" style="margin:0 0 12px;font-size:clamp(38px,10vw,64px);color:#6B4C14">A Little Surprise Awaits...</h2>
+<p style="margin:0 auto;max-width:520px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(20px,4.6vw,26px);color:#6B4C14">Some dates are too special to simply reveal. Scratch away and discover the day our forever begins. ❤️</p>
+<div class="scr-row">
+<div><div class="scr-lbl">Date</div><div class="scr-box" data-k="day" role="button" tabindex="0" aria-label="Date. Scratch, or press Enter to reveal."><div class="scr-val" id="sv-day"></div><canvas aria-hidden="true"></canvas></div></div>
+<div><div class="scr-lbl">Month</div><div class="scr-box" data-k="month" role="button" tabindex="0" aria-label="Month. Scratch, or press Enter to reveal."><div class="scr-val m" id="sv-month"></div><canvas aria-hidden="true"></canvas></div></div>
+<div><div class="scr-lbl">Year</div><div class="scr-box" data-k="year" role="button" tabindex="0" aria-label="Year. Scratch, or press Enter to reveal."><div class="scr-val" id="sv-year"></div><canvas aria-hidden="true"></canvas></div></div>
+</div>
+<div id="finalReveal" hidden aria-live="polite">
+<div id="hearts" aria-hidden="true"></div>
+<div class="script" style="font-size:clamp(34px,9vw,56px);color:#6B4C14">The Day Our Forever Begins ❤️</div>
+<div id="finalDate" style="margin-top:8px;font-family:'Cormorant Garamond',serif;font-size:clamp(40px,11vw,76px);line-height:1.1"></div>
+</div>
+</div>
+</section>
+
+<!-- COUPLE -->
+<section class="sec" style="text-align:center;max-width:1000px;margin:0 auto">
+<div style="font-size:14px;letter-spacing:5px;text-transform:uppercase;color:#8A6420">The Couple</div>
+<h2 style="margin:8px 0 48px;font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(34px,8vw,52px)">Bride &amp; Groom</h2>
+<div style="display:flex;gap:40px;justify-content:center;flex-wrap:wrap">
+<div style="width:min(380px,100%);background:#fff;border:1px solid #E6D5B0;border-radius:200px 200px 16px 16px;padding:28px 28px 32px">
+<img src="images/nikita.jpg" alt="Nikita laughing in Vicky's arms" style="width:100%;height:340px;object-fit:cover;object-position:50% 30%;border-radius:170px 170px 8px 8px;display:block">
+<div style="margin-top:20px;font-size:14px;letter-spacing:4px;text-transform:uppercase;color:#8A6420">The Bride</div>
+<div style="font-family:'Cormorant Garamond',serif;font-size:40px">Nikita</div>
+</div>
+<div style="width:min(380px,100%);background:#fff;border:1px solid #E6D5B0;border-radius:200px 200px 16px 16px;padding:28px 28px 32px">
+<img src="images/vicky.jpg" alt="Vicky smiling" style="width:100%;height:340px;object-fit:cover;object-position:50% 22%;border-radius:170px 170px 8px 8px;display:block">
+<div style="margin-top:20px;font-size:14px;letter-spacing:4px;text-transform:uppercase;color:#8A6420">The Groom</div>
+<div style="font-family:'Cormorant Garamond',serif;font-size:40px">Vicky</div>
+</div>
+</div>
+</section>
+
+<!-- COUNTDOWN -->
+<section id="countdown" class="sec" style="background:#2E2745;color:#FBF6EC;text-align:center">
+<div style="font-size:14px;letter-spacing:5px;text-transform:uppercase;color:#E8C97A">Counting Down</div>
+<h2 style="margin:8px 0 40px;font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(24px,6vw,48px)">29 November 2026, 10:59 AM IST</h2>
+<div id="live">
+<div class="cnt" style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap" role="timer" aria-live="off">
+<div class="tile"><div class="num" id="cd-d">0</div><div class="lbl">Days</div></div>
+<div class="tile"><div class="num" id="cd-h">0</div><div class="lbl">Hours</div></div>
+<div class="tile"><div class="num" id="cd-m">0</div><div class="lbl">Minutes</div></div>
+<div class="tile"><div class="num" id="cd-s">0</div><div class="lbl">Seconds</div></div>
+</div>
+</div>
+<div id="done" hidden>
+<div style="font-family:'Cormorant Garamond',serif;font-size:clamp(40px,10vw,64px);color:#E8C97A">Just Married</div>
+</div>
+</section>
+
+<!-- VENUE -->
+<section class="sec" style="max-width:1000px;margin:0 auto;text-align:center">
+<div style="font-size:14px;letter-spacing:5px;text-transform:uppercase;color:#8A6420">The Venue</div>
+<h2 style="margin:8px 0 40px;font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(34px,8vw,52px)">Lakhotiya Celebration Hall</h2>
+<div style="display:flex;gap:20px;flex-wrap:wrap;justify-content:center">
+<div style="flex:1;min-width:min(220px,100%);background:#fff;border:1px solid #E6D5B0;border-radius:16px;padding:28px"><div style="font-size:14px;letter-spacing:3px;text-transform:uppercase;color:#8A6420">Date</div><div style="font-family:'Cormorant Garamond',serif;font-size:30px">29 November 2026</div></div>
+<div style="flex:1;min-width:min(220px,100%);background:#fff;border:1px solid #E6D5B0;border-radius:16px;padding:28px"><div style="font-size:14px;letter-spacing:3px;text-transform:uppercase;color:#8A6420">Time</div><div style="font-family:'Cormorant Garamond',serif;font-size:30px">10:59 AM</div></div>
+<div style="flex:2;min-width:min(300px,100%);background:#fff;border:1px solid #E6D5B0;border-radius:16px;padding:28px"><div style="font-size:14px;letter-spacing:3px;text-transform:uppercase;color:#8A6420">Address</div><div style="font-size:18px">Dudhala, Nagpur - Amravati Road, Kondhali, Nagpur, Maharashtra</div></div>
+</div>
+<a href="https://share.google/8Fzkd0Sanocb0bqg4" style="display:inline-block;margin-top:32px;min-height:44px;line-height:44px;padding:0 36px;background:#8A6420;border-radius:44px;color:#fff;font-size:14px;letter-spacing:3px;text-transform:uppercase">Get Directions</a>
+</section>
+
+<!-- EVENTS -->
+<section class="sec" style="background:#F3E6D3">
+<div style="max-width:760px;margin:0 auto">
+<div style="text-align:center;font-size:14px;letter-spacing:5px;text-transform:uppercase;color:#8A6420">Celebrations</div>
+<h2 style="margin:8px 0 32px;text-align:center;font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(34px,8vw,52px)">The Events</h2>
+<div role="tablist" aria-label="Events" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:24px">
+<button id="tabHaldi" class="tab on" role="tab" aria-selected="true">1 · Haldi</button>
+<button id="tabWedding" class="tab" role="tab" aria-selected="false">2 · Wedding</button>
+</div>
+<div id="panelHaldi">
+<div role="tabpanel" style="background:#fff;border:1px solid #E6D5B0;border-radius:20px;padding:28px 18px;text-align:center">
+<div style="font-family:'Cormorant Garamond',serif;font-size:clamp(34px,8vw,48px)">Haldi</div>
+<div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:20px 0"><div style="flex:1 1 130px;border:1px solid #E6D5B0;border-radius:12px;padding:12px;background:#FBF6EC"><div style="font-size:14px;letter-spacing:3px;text-transform:uppercase;color:#8A6420">Date</div><div style="font-size:20px">27 Nov 2026</div></div><div style="flex:1 1 130px;border:1px solid #E6D5B0;border-radius:12px;padding:12px;background:#FBF6EC"><div style="font-size:14px;letter-spacing:3px;text-transform:uppercase;color:#8A6420">Day</div><div style="font-size:20px">Friday</div></div><div style="flex:1 1 130px;border:1px solid #E6D5B0;border-radius:12px;padding:12px;background:#FBF6EC"><div style="font-size:14px;letter-spacing:3px;text-transform:uppercase;color:#8A6420">Time</div><div style="font-size:20px">07:00 PM</div></div><div style="flex:2 1 220px;border:1px solid #E6D5B0;border-radius:12px;padding:12px;background:#FBF6EC"><div style="font-size:14px;letter-spacing:3px;text-transform:uppercase;color:#8A6420">Venue</div><div style="font-size:20px">Nikki Disha Apartment, Kharbi Road, Nagpur</div></div></div>
+</div></div>
+<div id="panelWedding" hidden>
+<div role="tabpanel" style="background:#fff;border:1px solid #E6D5B0;border-radius:20px;padding:28px 18px;text-align:center">
+<div style="font-family:'Cormorant Garamond',serif;font-size:clamp(34px,8vw,48px)">Wedding</div>
+<div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:20px 0"><div style="flex:1 1 130px;border:1px solid #E6D5B0;border-radius:12px;padding:12px;background:#FBF6EC"><div style="font-size:14px;letter-spacing:3px;text-transform:uppercase;color:#8A6420">Date</div><div style="font-size:20px">29 Nov 2026</div></div><div style="flex:1 1 130px;border:1px solid #E6D5B0;border-radius:12px;padding:12px;background:#FBF6EC"><div style="font-size:14px;letter-spacing:3px;text-transform:uppercase;color:#8A6420">Day</div><div style="font-size:20px">Sunday</div></div><div style="flex:1 1 130px;border:1px solid #E6D5B0;border-radius:12px;padding:12px;background:#FBF6EC"><div style="font-size:14px;letter-spacing:3px;text-transform:uppercase;color:#8A6420">Time</div><div style="font-size:20px">10:59 AM</div></div><div style="flex:2 1 220px;border:1px solid #E6D5B0;border-radius:12px;padding:12px;background:#FBF6EC"><div style="font-size:14px;letter-spacing:3px;text-transform:uppercase;color:#8A6420">Venue</div><div style="font-size:20px">Lakhotiya Celebration Hall</div></div></div>
+<a href="https://share.google/8Fzkd0Sanocb0bqg4" style="display:inline-block;min-height:44px;line-height:44px;padding:0 32px;background:#8A6420;border-radius:44px;color:#fff;font-size:14px;letter-spacing:3px;text-transform:uppercase">Get Directions</a>
+</div></div>
+</div>
+</section>
+
+<!-- ALBUM -->
+<section class="sec" style="max-width:1100px;margin:0 auto;text-align:center">
+<div style="font-size:14px;letter-spacing:5px;text-transform:uppercase;color:#8A6420">Moments</div>
+<h2 style="margin:8px 0 40px;font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(34px,8vw,52px)">Photo Album</h2>
+<div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
+<img src="images/photo1.jpg" alt="The ring moment on stage" class="alb" style="flex:0 1 min(227px,calc(50% - 8px));height:auto;aspect-ratio:2/3;border-radius:110px 110px 12px 12px">
+<img src="images/photo2.jpg" alt="First dance among sparkles" class="alb" style="object-position:50% 50%;border-radius:12px">
+<img src="images/photo4.jpg" alt="Showing off the rings" class="alb" style="object-position:60% 45%;border-radius:110px 110px 12px 12px">
+<img src="images/photo5.jpg" alt="Vicky lifting Nikita, both laughing" class="alb" style="object-position:50% 38%;border-radius:12px">
+<img src="images/photo3.jpg" alt="Walking together hand in hand" class="alb" style="object-position:50% 42%;border-radius:110px 110px 12px 12px">
+</div>
+</section>
+
+<!-- RSVP -->
+<section id="rsvp" class="sec" style="background:#F3E6D3;text-align:center">
+<div style="max-width:620px;margin:0 auto">
+<h2 style="margin:0 0 16px;font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(34px,8vw,52px)">Will You Join Us?</h2>
+<p style="margin:0 0 14px;font-size:18px">Please reply by 05 November, so we can plan the food arrangements accordingly.</p>
+<p style="margin:0 0 28px">Food is a blessing, and every grain matters. We wish to avoid wastage and prepare only what is needed. Your timely response will help us celebrate responsibly. ❤️</p>
+<div style="background:#fff;border:1px solid #E6D5B0;border-radius:20px;padding:12px 20px 28px">
+<label for="rsvpName" style="font-size:14px;letter-spacing:2px;text-transform:uppercase;color:#6B4C14;display:block;margin:20px 0 8px;text-align:left">Your Name</label>
+<input id="rsvpName" type="text" maxlength="80" autocomplete="name" placeholder="Enter your name" style="width:100%;min-height:48px;padding:10px 14px;border:1px solid #CDB88A;border-radius:12px;background:#fff;font:400 16px Jost,sans-serif;color:#3A2F2A">
+<fieldset style="border:0;padding:0;margin:0;min-width:0"><legend style="font-size:14px;letter-spacing:2px;text-transform:uppercase;color:#6B4C14;display:block;margin:20px 0 8px;text-align:left;padding:0">Attendance Status</legend>
+<div style="display:flex;gap:12px;flex-wrap:wrap">
+<label class="opt"><input type="radio" name="att" value="yes"> Joyfully Accepts ❤️</label>
+<label class="opt"><input type="radio" name="att" value="no"> Regretfully Declines</label>
+</div></fieldset>
+<div id="guestsBox">
+<label for="rsvpGuests" style="font-size:14px;letter-spacing:2px;text-transform:uppercase;color:#6B4C14;display:block;margin:20px 0 8px;text-align:left">Number of Guests (Including You)</label>
+<input id="rsvpGuests" type="number" min="1" max="20" inputmode="numeric" placeholder="Enter number" style="width:100%;min-height:48px;padding:10px 14px;border:1px solid #CDB88A;border-radius:12px;background:#fff;font:400 16px Jost,sans-serif;color:#3A2F2A">
+</div>
+<label for="rsvpMsg" style="font-size:14px;letter-spacing:2px;text-transform:uppercase;color:#6B4C14;display:block;margin:20px 0 8px;text-align:left">A Message for the Bride &amp; Groom 💌</label>
+<textarea id="rsvpMsg" rows="4" maxlength="500" placeholder="Leave us your wishes..." style="width:100%;min-height:48px;padding:10px 14px;border:1px solid #CDB88A;border-radius:12px;background:#fff;font:400 16px Jost,sans-serif;color:#3A2F2A;resize:vertical"></textarea>
+<input id="hp" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+<div id="rErr" role="alert" hidden style="margin-top:16px;color:#8A1F1F"></div>
+<button id="sendBtn" style="margin-top:24px;min-height:48px;padding:0 40px;border:0;border-radius:48px;background:#8A6420;color:#fff;font:500 15px Jost,sans-serif;letter-spacing:3px;text-transform:uppercase;cursor:pointer">Send Reply</button>
+<div id="rSent" role="status" hidden style="margin-top:16px"></div>
+</div></div>
+</section>
+
+<!-- GUEST WALL -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><symbol id="flower" viewBox="-20 -20 40 40"><g fill="currentColor"><ellipse cx="0" cy="-10" rx="5.5" ry="9.5"/><ellipse cx="0" cy="-10" rx="5.5" ry="9.5" transform="rotate(72)"/><ellipse cx="0" cy="-10" rx="5.5" ry="9.5" transform="rotate(144)"/><ellipse cx="0" cy="-10" rx="5.5" ry="9.5" transform="rotate(216)"/><ellipse cx="0" cy="-10" rx="5.5" ry="9.5" transform="rotate(288)"/></g><circle r="4.2" fill="#E8C97A"/></symbol></svg>
+<section id="wall" class="sec" style="position:relative;overflow:hidden;background:linear-gradient(180deg,#FBF6EC 0%,#F8E9E1 55%,#FBF6EC 100%);text-align:center">
+<svg aria-hidden="true" width="190" height="190" viewBox="0 0 190 190" style="position:absolute;top:-18px;left:-18px;opacity:.5;pointer-events:none"><use href="#flower" x="10" y="10" width="80.0" height="80.0" transform="rotate(0 50.0 50.0)" style="color:#F2C9C0"/><use href="#flower" x="78" y="34" width="56.0" height="56.0" transform="rotate(25 106.0 62.0)" style="color:#F6DAB8"/><use href="#flower" x="22" y="86" width="48.0" height="48.0" transform="rotate(-20 46.0 110.0)" style="color:#EBB6AC"/><use href="#flower" x="110" y="6" width="36.0" height="36.0" transform="rotate(10 128.0 24.0)" style="color:#F2C9C0"/><use href="#flower" x="4" y="128" width="32.0" height="32.0" transform="rotate(30 20.0 144.0)" style="color:#F6DAB8"/></svg><svg aria-hidden="true" width="190" height="190" viewBox="0 0 190 190" style="position:absolute;top:-18px;right:-18px;transform:scaleX(-1);opacity:.5;pointer-events:none"><use href="#flower" x="10" y="10" width="80.0" height="80.0" transform="rotate(0 50.0 50.0)" style="color:#F2C9C0"/><use href="#flower" x="78" y="34" width="56.0" height="56.0" transform="rotate(25 106.0 62.0)" style="color:#F6DAB8"/><use href="#flower" x="22" y="86" width="48.0" height="48.0" transform="rotate(-20 46.0 110.0)" style="color:#EBB6AC"/><use href="#flower" x="110" y="6" width="36.0" height="36.0" transform="rotate(10 128.0 24.0)" style="color:#F2C9C0"/><use href="#flower" x="4" y="128" width="32.0" height="32.0" transform="rotate(30 20.0 144.0)" style="color:#F6DAB8"/></svg><svg aria-hidden="true" width="190" height="190" viewBox="0 0 190 190" style="position:absolute;bottom:-18px;left:-18px;transform:scaleY(-1);opacity:.5;pointer-events:none"><use href="#flower" x="10" y="10" width="80.0" height="80.0" transform="rotate(0 50.0 50.0)" style="color:#F2C9C0"/><use href="#flower" x="78" y="34" width="56.0" height="56.0" transform="rotate(25 106.0 62.0)" style="color:#F6DAB8"/><use href="#flower" x="22" y="86" width="48.0" height="48.0" transform="rotate(-20 46.0 110.0)" style="color:#EBB6AC"/><use href="#flower" x="110" y="6" width="36.0" height="36.0" transform="rotate(10 128.0 24.0)" style="color:#F2C9C0"/><use href="#flower" x="4" y="128" width="32.0" height="32.0" transform="rotate(30 20.0 144.0)" style="color:#F6DAB8"/></svg><svg aria-hidden="true" width="190" height="190" viewBox="0 0 190 190" style="position:absolute;bottom:-18px;right:-18px;transform:scale(-1,-1);opacity:.5;pointer-events:none"><use href="#flower" x="10" y="10" width="80.0" height="80.0" transform="rotate(0 50.0 50.0)" style="color:#F2C9C0"/><use href="#flower" x="78" y="34" width="56.0" height="56.0" transform="rotate(25 106.0 62.0)" style="color:#F6DAB8"/><use href="#flower" x="22" y="86" width="48.0" height="48.0" transform="rotate(-20 46.0 110.0)" style="color:#EBB6AC"/><use href="#flower" x="110" y="6" width="36.0" height="36.0" transform="rotate(10 128.0 24.0)" style="color:#F2C9C0"/><use href="#flower" x="4" y="128" width="32.0" height="32.0" transform="rotate(30 20.0 144.0)" style="color:#F6DAB8"/></svg>
+<div style="position:relative;max-width:920px;margin:0 auto">
+<h2 style="margin:0 0 12px;font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(36px,9vw,60px)">Who’s Joining Us?</h2>
+<p style="margin:0 auto 32px;max-width:520px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(20px,4.5vw,26px);color:#6B4C14">Our hearts are full knowing you’ll be celebrating with us!</p>
+<div class="ring" role="status" aria-live="polite"><div id="wallCount" class="big">0</div><div class="cap">TOTAL CONFIRMED ATTENDEES</div></div>
+<div id="wallNames" class="names"></div>
+<p id="wallNote" style="margin:24px 0 0;font-size:16px;color:#6B4C14"></p>
+</div>
+</section>
+
+<!-- BLESSING WALL -->
+<section id="blessings" class="sec" style="background:linear-gradient(180deg,#FBF6EC 0%,#F5E6DA 100%);text-align:center;position:relative;overflow:hidden">
+<div style="max-width:980px;margin:0 auto">
+<svg class="orn" aria-hidden="true"><use href="#flower" style="color:#E9B8B0"/></svg>
+<h2 class="script" style="margin:0 0 12px;font-size:clamp(38px,10vw,64px);color:#6B4C14">Words of Love &amp; Blessings</h2>
+<p style="margin:0 auto 32px;max-width:540px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(20px,4.6vw,26px);color:#6B4C14">Every blessing is a little piece of love that makes our journey more beautiful.</p>
+<div style="max-width:620px;margin:0 auto;background:#fff;border:1px solid #E6D5B0;border-radius:20px;padding:6px 20px 28px">
+<label for="blName" style="font-size:14px;letter-spacing:2px;text-transform:uppercase;color:#6B4C14;display:block;margin:20px 0 8px;text-align:left">Your Name</label>
+<input id="blName" type="text" maxlength="80" autocomplete="name" placeholder="Enter your name" style="width:100%;min-height:48px;padding:10px 14px;border:1px solid #CDB88A;border-radius:12px;background:#fff;font:400 16px Jost,sans-serif;color:#3A2F2A">
+<label for="blRel" style="font-size:14px;letter-spacing:2px;text-transform:uppercase;color:#6B4C14;display:block;margin:20px 0 8px;text-align:left">Your Relationship</label>
+<select id="blRel" style="width:100%;min-height:48px;padding:10px 14px;border:1px solid #CDB88A;border-radius:12px;background:#fff;font:400 16px Jost,sans-serif;color:#3A2F2A"><option value="">Choose…</option><option>Family</option><option>Friend</option><option>Relative</option><option>Couple</option><option>Colleague</option><option>Other</option></select>
+<label for="blMsg" style="font-size:14px;letter-spacing:2px;text-transform:uppercase;color:#6B4C14;display:block;margin:20px 0 8px;text-align:left">Your Blessing / Message</label>
+<textarea id="blMsg" rows="5" maxlength="1500" placeholder="Write from the heart..." style="width:100%;min-height:48px;padding:10px 14px;border:1px solid #CDB88A;border-radius:12px;background:#fff;font:400 16px Jost,sans-serif;color:#3A2F2A;resize:vertical"></textarea>
+<input id="blHp" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+<div id="blErr" role="alert" hidden style="margin-top:16px;color:#8A1F1F"></div>
+<button id="blBtn" style="margin-top:24px;min-height:48px;padding:0 32px;border:0;border-radius:48px;background:#8A6420;color:#fff;font:500 15px Jost,sans-serif;letter-spacing:2px;text-transform:uppercase;cursor:pointer">Send Your Blessings ❤️</button>
+<div id="blOk" role="status" hidden class="script" style="margin-top:18px;font-size:26px;line-height:1.35;color:#6B4C14">Your beautiful words have found a place in our hearts. Thank you for being part of our story! ❤️<div style="font-family:Jost,sans-serif;font-size:15px;margin-top:8px;color:#6B4C14">Blessings appear on the wall once the couple has approved them.</div></div>
+</div>
+<p id="blNote" style="margin:36px 0 0;color:#6B4C14" role="status"></p>
+<div id="blWall" class="bl-wrap"></div>
+</div>
+</section>
+
+<!-- FOOTER -->
+<section class="sec" style="background:#2E2745;color:#FBF6EC;text-align:center">
+<img src="images/photo4.jpg" alt="Vicky and Nikita showing their rings" style="width:min(300px,76vw);aspect-ratio:2/3;object-fit:cover;border-radius:150px 150px 12px 12px;border:2px solid #E8C97A;display:block;margin:0 auto 28px">
+<div style="font-family:'Cormorant Garamond',serif;font-size:clamp(38px,10vw,56px)">Vicky &amp; Nikita</div>
+<div style="margin-top:8px;font-size:18px;color:#E8C97A">29 November 2026 · Lakhotiya Celebration Hall</div>
+</section>
+</div>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)},root=$('invRoot');
+var rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+var p2=function(n){return String(n).padStart(2,'0')};
+var clamp=function(v,a,b){return Math.max(a,Math.min(b,v))};
+/* COUNTDOWN: fixed +05:30 IST offset, right in every country */
+var T=new Date('2026-11-29T10:59:00+05:30');
+function tick(){var t=Math.max(0,T-Date.now());
+ $('cd-d').textContent=Math.floor(t/864e5);$('cd-h').textContent=p2(Math.floor(t/36e5)%24);
+ $('cd-m').textContent=p2(Math.floor(t/6e4)%60);$('cd-s').textContent=p2(Math.floor(t/1e3)%60);
+ $('live').hidden=t<=0;$('done').hidden=t>0;}
+tick();setInterval(tick,1000);
+/* PAPER-PLANE FLIGHT PATH */
+var W=0,H=0,pts=[],pathD='';
+function build(){var n=Math.max(2,Math.round(H/650)),px=W*.5,py=0,d='M'+px+',0';pts=[];
+ for(var i=1;i<=n;i++){var x1=W*(i%2?.9:.1),y1=H*i/n,dy=y1-py,c1=py+dy*.5,c2=y1-dy*.5;
+  d+=' C'+px+','+c1+' '+x1+','+c2+' '+x1+','+y1;
+  for(var j=(i===1?0:1);j<=24;j++){var u=j/24,v=1-u;
+   pts.push({x:v*v*v*px+3*v*v*u*px+3*v*u*u*x1+u*u*u*x1,y:v*v*v*py+3*v*v*u*c1+3*v*u*u*c2+u*u*u*y1});}
+  px=x1;py=y1;}
+ pathD=d;$('pathD').setAttribute('d',d);var s=$('flight');s.setAttribute('width',W);s.setAttribute('height',H);}
+function frame(){var r=root.getBoundingClientRect(),w=root.offsetWidth,h=root.offsetHeight;
+ if(!pts.length||w!==W||h!==H){W=w||1;H=h||1;build();}
+ var sy=rm?0:Math.max(0,-r.top);
+ $('heroBg').style.transform='translateY('+Math.round(Math.min(sy*.2,80))+'px)';
+ $('arch').style.transform='translateY('+Math.round(sy*.12)+'px)';
+ if(rm){$('plane').setAttribute('opacity',0);return;}
+ var ty=clamp(innerHeight*.42-r.top,0,H),lo=0,hi=pts.length-1;
+ while(lo<hi){var m=(lo+hi)>>1;if(pts[m].y<ty)lo=m+1;else hi=m;}
+ var a=pts[Math.max(0,lo-1)],b=pts[Math.min(pts.length-1,lo+1)],c=pts[lo];
+ var ang=Math.atan2(b.y-a.y,b.x-a.x)*180/Math.PI,tr='M'+pts[0].x.toFixed(1)+','+pts[0].y.toFixed(1);
+ for(var i=1;i<=lo;i++)tr+=' L'+pts[i].x.toFixed(1)+','+pts[i].y.toFixed(1);
+ $('trailD').setAttribute('d',tr);
+ $('plane').setAttribute('transform','translate('+c.x.toFixed(1)+' '+c.y.toFixed(1)+') rotate('+ang.toFixed(1)+')');}
+var raf=0;function sched(){if(!raf)raf=requestAnimationFrame(function(){raf=0;frame();});}
+addEventListener('scroll',sched,{passive:true});addEventListener('resize',sched);addEventListener('load',sched);
+setInterval(sched,1000);sched();
+/* CANDLE GLOW: mouse on desktop, finger on phones */
+var g=$('glow'),off=0,graf=0,gx=0,gy=0;
+function glow(cx,cy){var r=root.getBoundingClientRect();gx=cx-r.left;gy=cy-r.top;clearTimeout(off);
+ if(!graf)graf=requestAnimationFrame(function(){graf=0;g.style.transform='translate('+Math.round(gx-160)+'px,'+Math.round(gy-160)+'px)';g.style.opacity=1;});}
+function gleave(){clearTimeout(off);off=setTimeout(function(){g.style.opacity=0;},700);}
+if(!rm){root.addEventListener('mousemove',function(e){glow(e.clientX,e.clientY)});root.addEventListener('mouseleave',gleave);
+ var tm=function(e){var c=e.touches[0];if(c)glow(c.clientX,c.clientY)};
+ root.addEventListener('touchstart',tm,{passive:true});root.addEventListener('touchmove',tm,{passive:true});root.addEventListener('touchend',gleave);}
+/* EVENT TABS */
+function pick(h){$('panelHaldi').hidden=!h;$('panelWedding').hidden=h;
+ $('tabHaldi').classList.toggle('on',h);$('tabWedding').classList.toggle('on',!h);
+ $('tabHaldi').setAttribute('aria-selected',h);$('tabWedding').setAttribute('aria-selected',!h);}
+$('tabHaldi').addEventListener('click',function(){pick(true)});$('tabWedding').addEventListener('click',function(){pick(false)});
+/* ===== SCRATCH-TO-REVEAL (date comes from the single countdown date T above) ===== */
+(function(){
+var fm=function(o){return new Intl.DateTimeFormat('en-IN',Object.assign({timeZone:'Asia/Kolkata'},o)).format(T)};
+var D={day:fm({day:'numeric'}),month:fm({month:'long'}),year:fm({year:'numeric'})};
+$('sv-day').textContent=D.day;$('sv-month').textContent=D.month;$('sv-year').textContent=D.year;
+var boxes=document.querySelectorAll('.scr-box'),revealed=0;
+function allDone(){var f=$('finalReveal');$('finalDate').textContent=fm({weekday:'long'})+', '+D.day+' '+D.month+' '+D.year;
+ f.hidden=false;requestAnimationFrame(function(){f.classList.add('show');});
+ if(!rm){var h=$('hearts');for(var i=0;i<14;i++){var e=document.createElement('span');e.className='heart';e.textContent=i%2?'❤':'✿';
+  e.style.left=(6+Math.random()*88)+'%';e.style.color=i%2?'#E3A5A0':'#D9B25F';e.style.animationDelay=(Math.random()*2.5)+'s';h.appendChild(e);}
+  setTimeout(function(){h.textContent='';},9000);}}
+boxes.forEach(function(box){
+ var cv=box.querySelector('canvas'),ctx=cv.getContext('2d'),w=0,h=0,done=false,down=false,last=null,n=0,touched=false;
+ function paint(){ctx.globalCompositeOperation='source-over';
+  var g=ctx.createLinearGradient(0,0,w,h);g.addColorStop(0,'#F4E4BF');g.addColorStop(.5,'#E6CC94');g.addColorStop(1,'#F7EBD2');
+  ctx.fillStyle=g;ctx.fillRect(0,0,w,h);ctx.strokeStyle='rgba(138,100,32,.5)';ctx.lineWidth=1.5;ctx.strokeRect(6,6,w-12,h-12);
+  [[20,20],[w-20,20],[20,h-20],[w-20,h-20]].forEach(function(p){for(var i=0;i<5;i++){var a=i*1.2566;ctx.beginPath();ctx.arc(p[0]+Math.cos(a)*6,p[1]+Math.sin(a)*6,4,0,6.3);ctx.fillStyle='rgba(224,160,152,.7)';ctx.fill();}
+   ctx.beginPath();ctx.arc(p[0],p[1],3,0,6.3);ctx.fillStyle='#B8893A';ctx.fill();});
+  ctx.fillStyle='#6B4C14';ctx.font='500 '+Math.max(13,Math.min(17,w/8))+'px Jost, sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText('Scratch to',w/2,h/2-11);ctx.fillText('Reveal',w/2,h/2+11);}
+ function size(){var d=Math.min(devicePixelRatio||1,2);w=box.clientWidth;h=box.clientHeight;cv.width=w*d;cv.height=h*d;ctx.setTransform(d,0,0,d,0,0);paint();}
+ size();addEventListener('resize',function(){if(!done&&!touched&&box.clientWidth!==w)size();});
+ function reveal(){if(done)return;done=true;box.classList.add('rv');box.removeAttribute('tabindex');box.removeAttribute('role');
+  box.setAttribute('aria-label',box.querySelector('.scr-val').textContent);if(++revealed===boxes.length)allDone();}
+ function pos(e){var r=cv.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top};}
+ function check(){var d=ctx.getImageData(0,0,cv.width,cv.height).data,c=0,t=0;for(var i=3;i<d.length;i+=16){t++;if(d[i]<128)c++;}if(c/t>=.5)reveal();}
+ function stroke(e){if(done)return;var p=pos(e);ctx.globalCompositeOperation='destination-out';ctx.lineWidth=Math.max(28,w/5);ctx.lineCap='round';ctx.lineJoin='round';
+  ctx.beginPath();ctx.moveTo((last||p).x,(last||p).y);ctx.lineTo(p.x,p.y);ctx.stroke();last=p;if(++n%5===0)check();}
+ cv.addEventListener('pointerdown',function(e){down=true;touched=true;last=null;try{cv.setPointerCapture(e.pointerId);}catch(x){}stroke(e);e.preventDefault();});
+ cv.addEventListener('pointermove',function(e){if(down){stroke(e);e.preventDefault();}});
+ var up=function(){if(down){down=false;last=null;if(!done)check();}};
+ cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
+ box.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();reveal();}});
+});
+})();
+/* ===== RSVP + LIVE GUEST WALL + BLESSINGS (Supabase, see README.md) ===== */
+var CFG=window.WEDDING_CFG||{},SB_URL=CFG.SUPABASE_URL||'',SB_KEY=CFG.SUPABASE_PUBLISHABLE_KEY||'';
+var sb=(SB_URL&&SB_KEY&&window.supabase)?window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}}):null;
+var ready=!!sb;
+/* every database call goes through the SQL functions in supabase-setup.sql (no direct table access) */
+function api(fn,body){
+ if(!ready)return Promise.reject(new Error('NOT_CONFIGURED'));
+ return sb.rpc(fn,body||{}).then(function(r){if(r.error)throw new Error(r.error.message||'REQUEST_FAILED');return r.data;});}
+var ERR={NAME_TAKEN:'Someone has already replied with this name. If that was you on another device, please add your surname or an initial, or ask the couple to correct it.',TOO_MANY:'Too many replies right now. Please try again a little later.',BAD_NAME:'Please enter your name (2 to 80 characters).',BAD_GUESTS:'Please enter the number of guests (1 to 20), including you.',BAD_MESSAGE:'That message is too short or too long.',BAD_REL:'Please choose your relationship.',NOT_CONFIGURED:'The reply service is not connected yet. Please try again later.'};
+function human(e){return ERR[e&&e.message]||'Sorry, that could not be saved. Please check your connection and try again.';}
+function uuid(){return crypto.randomUUID?crypto.randomUUID():'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,function(c){var r=Math.random()*16|0;return(c==='x'?r:(r&3|8)).toString(16)});}
+/* private random key kept on THIS device; only its hash is stored. Same device = same RSVP (update, never duplicate). */
+function devKey(){var k='';try{k=localStorage.getItem('vn-key')||'';if(!k){k=uuid()+uuid();localStorage.setItem('vn-key',k);}}catch(e){k=window._vk||(window._vk=uuid()+uuid());}return k;}
+/* ---- guest wall ---- */
+var lastSig='',seen=null,shown=0;
+function setCount(n){var el=$('wallCount'),from=shown;shown=n;
+ if(rm||from===n){el.textContent=n;return;}
+ var t0=performance.now();(function step(t){var k=Math.min(1,(t-t0)/700);el.textContent=Math.round(from+(n-from)*k);if(k<1)requestAnimationFrame(step);})(t0);}
+function renderWall(d){var list=(d&&d.guests)||[],sig=JSON.stringify(d);if(sig===lastSig)return;lastSig=sig;
+ var box=$('wallNames'),first=seen===null,now={};box.textContent='';
+ list.forEach(function(g){var key=g.name.toLowerCase();now[key]=1;
+  var c=document.createElement('span');c.className='gname'+(!first&&!seen[key]?' fresh':'');
+  c.innerHTML='<svg class="gf" aria-hidden="true"><use href="#flower"/></svg>';
+  var n=document.createElement('span');n.className='gn';n.textContent=g.name;c.appendChild(n);
+  if(g.guests>1){var x=document.createElement('span');x.className='gx';x.textContent='+'+(g.guests-1);x.title=(g.guests-1)+' more guest(s)';c.appendChild(x);}
+  box.appendChild(c);});
+ seen=now;setCount(+d.total||0);
+ $('wallNote').textContent=list.length?'':'Be the first to celebrate with us. ❤️';}
+function loadWall(){
+ if(!ready){$('wallNote').textContent='The guest wall goes live once the RSVP database is connected.';return Promise.resolve();}
+ return api('guest_wall').then(renderWall).catch(function(){if(seen===null)$('wallNote').textContent='Loading the guest list…';});}
+/* ---- blessings ---- */
+var blShown=false;
+function renderBl(list){var box=$('blWall');box.textContent='';blShown=true;
+ if(!list||!list.length){$('blNote').textContent='Be the first to leave a blessing. ❤️';return;}
+ $('blNote').textContent='';
+ list.forEach(function(b,i){var a=document.createElement('article');a.className='bl';a.style.animationDelay=Math.min(i,8)*70+'ms';
+  a.innerHTML='<svg class="bf" aria-hidden="true"><use href="#flower"/></svg>';
+  var m=document.createElement('p');m.className='bm';m.textContent=b.message;
+  var n=document.createElement('div');n.className='bn';n.textContent=b.name;
+  var r=document.createElement('div');r.className='br';r.textContent=b.relationship;
+  a.appendChild(m);a.appendChild(n);a.appendChild(r);box.appendChild(a);});}
+function loadBl(){
+ if(!ready){$('blNote').textContent='Blessings will appear here once the database is connected.';return;}
+ if(!blShown)$('blNote').textContent='Loading blessings…';
+ api('list_blessings').then(renderBl).catch(function(){if(!blShown)$('blNote').textContent='Blessings could not be loaded right now. Please refresh in a moment.';});}
+loadWall();loadBl();
+setInterval(function(){if(!document.hidden){loadWall();loadBl();}},20000);
+document.addEventListener('visibilitychange',function(){if(!document.hidden){loadWall();loadBl();}});
+/* ---- RSVP form ---- */
+function att(){var r=document.querySelector('input[name=att]:checked');return r?r.value:'';}
+function syncGuests(){$('guestsBox').hidden=att()==='no';}
+document.querySelectorAll('input[name=att]').forEach(function(r){r.addEventListener('change',syncGuests)});syncGuests();
+function err(m){var e=$('rErr');e.textContent=m;e.hidden=!m;}
+if(ready){api('my_rsvp',{p_key:devKey()}).then(function(r){if(!r)return;
+ $('rsvpName').value=r.name||'';$('rsvpMsg').value=r.message||'';if(r.guests)$('rsvpGuests').value=r.guests;
+ var rb=document.querySelector('input[name=att][value='+(r.status==='declined'?'no':'yes')+']');if(rb)rb.checked=true;syncGuests();
+ $('rSent').textContent='You have already replied. You can change your reply below and send it again.';$('rSent').hidden=false;}).catch(function(){});}
+$('sendBtn').addEventListener('click',function(){
+ var n=$('rsvpName').value.replace(/\s+/g,' ').trim(),a=att(),g=parseInt($('rsvpGuests').value,10),m=$('rsvpMsg').value.trim();
+ $('rSent').hidden=true;
+ if(n.length<2){err('Please enter your name.');return;}
+ if(!a){err('Please choose Joyfully Accepts or Regretfully Declines.');return;}
+ if(a==='yes'&&!(g>=1&&g<=20)){err('Please enter the number of guests (1 to 20), including you.');return;}
+ if($('hp').value){$('rSent').textContent='Thank you! ❤️';$('rSent').hidden=false;return;}
+ err('');var b=$('sendBtn');b.disabled=true;
+ api('submit_rsvp',{p_name:n,p_status:a==='yes'?'accepted':'declined',p_guests:a==='yes'?g:0,p_message:m,p_key:devKey()})
+ .then(function(res){$('rSent').textContent=a==='yes'?(res&&res.updated?'Thank you, '+n+'! Your reply has been updated. ❤️':'Thank you, '+n+'! Your joyful reply has found its place on our guest list. We cannot wait to celebrate with you. ❤️'):'Thank you for letting us know, '+n+'. You will be in our hearts on our special day. ❤️';
+  $('rSent').hidden=false;b.disabled=false;return loadWall();})
+ .catch(function(e){err(human(e));b.disabled=false;});});
+/* ---- blessing form ---- */
+function blErr(m){var e=$('blErr');e.textContent=m;e.hidden=!m;}
+$('blBtn').addEventListener('click',function(){
+ var n=$('blName').value.replace(/\s+/g,' ').trim(),r=$('blRel').value,m=$('blMsg').value.trim();$('blOk').hidden=true;
+ if(n.length<2){blErr('Please enter your name.');return;}
+ if(!r){blErr('Please choose your relationship.');return;}
+ if(m.length<5){blErr('Please write your blessing (at least a few words).');return;}
+ if($('blHp').value){$('blOk').hidden=false;return;}
+ blErr('');var b=$('blBtn');b.disabled=true;
+ api('submit_blessing',{p_name:n,p_rel:r,p_msg:m,p_key:devKey()})
+ .then(function(){$('blOk').hidden=false;$('blMsg').value='';b.disabled=false;loadBl();})
+ .catch(function(e){blErr(human(e));b.disabled=false;});});
+})();
+</script>
+</body>
+</html>
