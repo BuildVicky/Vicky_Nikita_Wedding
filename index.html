@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Jost:wght@400;500&family=Great+Vibes&display=swap" rel="stylesheet">
 <script src="config.js"></script>
-<script src="vendor/supabase.js"></script>
+<script src="supabase.js"></script>
 <style>
 body{margin:0;background:#FBF6EC}
 a{color:#8A6420;text-decoration:none}a:hover{color:#5C4112}
@@ -99,7 +99,7 @@ html,body{overflow-x:clip}
 
 <!-- HERO -->
 <section id="hero" style="background:#2E2745;color:#FBF6EC;text-align:center;padding:56px 16px 72px;position:relative;overflow:hidden;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-shadow:0 1px 14px rgba(20,14,34,.55)">
-<div aria-hidden="true" id="heroBg" style="position:absolute;left:0;right:0;top:-80px;bottom:0;pointer-events:none;background:linear-gradient(180deg,rgba(30,22,48,.55) 0%,rgba(30,22,48,.22) 42%,rgba(30,22,48,.62) 100%),url(images/venue.jpg) 48% 58%/cover no-repeat;will-change:transform"></div>
+<div aria-hidden="true" id="heroBg" style="position:absolute;left:0;right:0;top:-80px;bottom:0;pointer-events:none;background:linear-gradient(180deg,rgba(30,22,48,.55) 0%,rgba(30,22,48,.22) 42%,rgba(30,22,48,.62) 100%),url(venue.jpg) 48% 58%/cover no-repeat;will-change:transform"></div>
 <div style="position:relative;z-index:1;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:22px;color:#E8C97A">Shree Ganeshaya Namah</div>
 <div id="arch" style="position:relative;z-index:1;width:100%;max-width:640px"><div style="margin:36px auto 0;max-width:640px;border:1px solid #E8C97A;border-radius:320px 320px 0 0;padding:64px 20px 48px;background:rgba(24,18,38,0.36);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)">
 <div style="width:64px;height:64px;margin:0 auto 20px;border-radius:50%;border:1px solid #E8C97A;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:22px;color:#E8C97A">V&amp;N</div>
@@ -137,12 +137,12 @@ html,body{overflow-x:clip}
 <h2 style="margin:8px 0 48px;font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(34px,8vw,52px)">Bride &amp; Groom</h2>
 <div style="display:flex;gap:40px;justify-content:center;flex-wrap:wrap">
 <div style="width:min(380px,100%);background:#fff;border:1px solid #E6D5B0;border-radius:200px 200px 16px 16px;padding:28px 28px 32px">
-<img src="images/nikita.jpg" alt="Nikita laughing in Vicky's arms" style="width:100%;height:340px;object-fit:cover;object-position:50% 30%;border-radius:170px 170px 8px 8px;display:block">
+<img src="nikita.jpg" alt="Nikita laughing in Vicky's arms" style="width:100%;height:340px;object-fit:cover;object-position:50% 30%;border-radius:170px 170px 8px 8px;display:block">
 <div style="margin-top:20px;font-size:14px;letter-spacing:4px;text-transform:uppercase;color:#8A6420">The Bride</div>
 <div style="font-family:'Cormorant Garamond',serif;font-size:40px">Nikita</div>
 </div>
 <div style="width:min(380px,100%);background:#fff;border:1px solid #E6D5B0;border-radius:200px 200px 16px 16px;padding:28px 28px 32px">
-<img src="images/vicky.jpg" alt="Vicky smiling" style="width:100%;height:340px;object-fit:cover;object-position:50% 22%;border-radius:170px 170px 8px 8px;display:block">
+<img src="vicky.jpg" alt="Vicky smiling" style="width:100%;height:340px;object-fit:cover;object-position:50% 22%;border-radius:170px 170px 8px 8px;display:block">
 <div style="margin-top:20px;font-size:14px;letter-spacing:4px;text-transform:uppercase;color:#8A6420">The Groom</div>
 <div style="font-family:'Cormorant Garamond',serif;font-size:40px">Vicky</div>
 </div>
@@ -206,11 +206,11 @@ html,body{overflow-x:clip}
 <div style="font-size:14px;letter-spacing:5px;text-transform:uppercase;color:#8A6420">Moments</div>
 <h2 style="margin:8px 0 40px;font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(34px,8vw,52px)">Photo Album</h2>
 <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
-<img src="images/photo1.jpg" alt="The ring moment on stage" class="alb" style="flex:0 1 min(227px,calc(50% - 8px));height:auto;aspect-ratio:2/3;border-radius:110px 110px 12px 12px">
-<img src="images/photo2.jpg" alt="First dance among sparkles" class="alb" style="object-position:50% 50%;border-radius:12px">
-<img src="images/photo4.jpg" alt="Showing off the rings" class="alb" style="object-position:60% 45%;border-radius:110px 110px 12px 12px">
-<img src="images/photo5.jpg" alt="Vicky lifting Nikita, both laughing" class="alb" style="object-position:50% 38%;border-radius:12px">
-<img src="images/photo3.jpg" alt="Walking together hand in hand" class="alb" style="object-position:50% 42%;border-radius:110px 110px 12px 12px">
+<img src="photo1.jpg" alt="The ring moment on stage" class="alb" style="flex:0 1 min(227px,calc(50% - 8px));height:auto;aspect-ratio:2/3;border-radius:110px 110px 12px 12px">
+<img src="photo2.jpg" alt="First dance among sparkles" class="alb" style="object-position:50% 50%;border-radius:12px">
+<img src="photo4.jpg" alt="Showing off the rings" class="alb" style="object-position:60% 45%;border-radius:110px 110px 12px 12px">
+<img src="photo5.jpg" alt="Vicky lifting Nikita, both laughing" class="alb" style="object-position:50% 38%;border-radius:12px">
+<img src="photo3.jpg" alt="Walking together hand in hand" class="alb" style="object-position:50% 42%;border-radius:110px 110px 12px 12px">
 </div>
 </section>
 
@@ -279,7 +279,7 @@ html,body{overflow-x:clip}
 
 <!-- FOOTER -->
 <section class="sec" style="background:#2E2745;color:#FBF6EC;text-align:center">
-<img src="images/photo4.jpg" alt="Vicky and Nikita showing their rings" style="width:min(300px,76vw);aspect-ratio:2/3;object-fit:cover;border-radius:150px 150px 12px 12px;border:2px solid #E8C97A;display:block;margin:0 auto 28px">
+<img src="photo4.jpg" alt="Vicky and Nikita showing their rings" style="width:min(300px,76vw);aspect-ratio:2/3;object-fit:cover;border-radius:150px 150px 12px 12px;border:2px solid #E8C97A;display:block;margin:0 auto 28px">
 <div style="font-family:'Cormorant Garamond',serif;font-size:clamp(38px,10vw,56px)">Vicky &amp; Nikita</div>
 <div style="margin-top:8px;font-size:18px;color:#E8C97A">29 November 2026 · Lakhotiya Celebration Hall</div>
 </section>
